@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 
 
-class TaxiRoutes:
+class TaxiTrips:
     def __init__(self, path="test"):
         self.frame = None
         self.path = path
@@ -13,7 +13,7 @@ class TaxiRoutes:
     def initFrame(self):
         path = r'test'
         all_files = glob.glob(os.path.join(path, "*.txt"))
-        print(all_files)
+        print("Files used: \n", all_files)
 
         li = []
         for current_file in all_files:
@@ -50,35 +50,27 @@ class TaxiRoutes:
         max_totalamount = col_totalamount.max()
         print("Teuerste Fahrt: ", round(max_totalamount, 2), "$")
 
+    # Alle Providernames, duplikate entfernt
+    def get_distinct_providernames(self):
+        col_providernames = self.frame["PROVIDERNAME"]
+        distinct_providernames = col_providernames.drop_duplicates()
+        print("Alle Providernames:\n", distinct_providernames)
 
-Routes = TaxiRoutes()
-# Routes.getInfo()
-Routes.get_mean_mileage()
-Routes.get_mean_amont_per_drive()
-Routes.get_furthest_way()
-Routes.get_most_expensive_drive()
-# print(frame.info())
-# col_totalamount = frame["TOTALAMOUNT"]
-# max_totalamount = col_totalamount.max()
-# median_toalamount = col_totalamount.median()
-# all_columns = frame.columns
-# col_providernames = frame["PROVIDERNAME"]
-# distinct_providernames = frame.drop_duplicates(subset = ["PROVIDERNAME"])
-# # print("Max: ", max_fareamount)
-# # print("Median: ", median_fareamount)
-# # print("Providernames: ", distinct_providernames)
-# # print("Cols: ", list(all_columns))
-# # print(frame)
+    # Meisten Fahrten an einem Datum
+    def get_date_of_most_trips(self):
+        col_origindate = self.frame["ORIGINDATETIME_TR"]
+        origindate_most_drives = col_origindate.value_counts()
+        col_destinationdate = self.frame["DESTINATIONDATETIME_TR"]
+        destinationdate_most_drives = col_destinationdate.value_counts()
+        print("Meistes Datum/Uhrzeit Abfahrt:\n", origindate_most_drives)
+        print("Meistes Datum/Uhrzeit Ankunft:\n", destinationdate_most_drives)
 
-# # Erkennen von Datenmustern, etwa zu welchen Tageszeiten oder Wochentagen die meisten Fahrten stattfinden
-# col_origindate = frame["ORIGINDATETIME_TR"]
-# origindate_most_drives = col_origindate.value_counts()
-# col_destinationdate = frame["DESTINATIONDATETIME_TR"]
-# destinationdate_most_drives = col_destinationdate.value_counts()
-# print("Meistes Datum/Uhrzeit Abfahrt: ", origindate_most_drives)
-# print("Meistes Datum/Uhrzeit Ankunft: ", destinationdate_most_drives)
 
-# # Berechnen von Measures wie durchschnittlicher Fahrpreis, durchschnittliche Strecke und Gesamtstrecke aller Taxis pro
-# # Jahr und deren jeweiliger Entwicklung über die Zeit hinweg
-# mean_totalamount = col_totalamount.mean()
-# print("Durchschnittlicher Fahrpreis: ", round(mean_totalamount, 2), "$")
+Trips = TaxiTrips()
+# Trips.getInfo()
+Trips.get_mean_mileage()
+Trips.get_mean_amont_per_drive()
+Trips.get_furthest_way()
+Trips.get_most_expensive_drive()
+Trips.get_distinct_providernames()
+Trips.get_date_of_most_trips()
